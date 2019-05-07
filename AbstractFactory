@@ -1,0 +1,144 @@
+// Example program
+#include <iostream>
+#include <string>
+
+using namespace std;
+
+// Abstract base class 
+class Mobile 
+{
+    public:
+    Mobile(string str):Device(str){}
+    virtual string Camera() = 0;
+    virtual string KeyBoard() = 0;
+    void PrintSpecs() 
+    {
+        cout << Device << endl;
+        cout << Camera() << endl;
+        cout << KeyBoard() << endl;
+    }
+    string Device;
+};
+
+// Concrete classes for AndroidMobileV1
+class AndroidMobileV1 : public Mobile 
+{
+
+    public:
+    AndroidMobileV1(): Mobile("AndroidMobileVer1"){}
+    string Camera() 
+    {
+        return "2 MegaPixel";
+    }
+    string KeyBoard() 
+    {
+        return "ITU-T1";
+    }
+};
+
+// Concrete classes for AndroidMobileV2
+class AndroidMobileV2 : public Mobile 
+{
+    public:
+    AndroidMobileV2(): Mobile("AndroidMobileV2"){}
+    string Camera() 
+    {
+        return "3 MegaPixel";
+    }
+    string KeyBoard() 
+    {
+        return "ITU-T2";
+    }
+};
+
+// Concrete classes for AppleMobileV1
+class AppleMobileV1 : public Mobile 
+{
+    public:
+    AppleMobileV1(): Mobile("AppleMobileV1"){}
+    string Camera() 
+    {
+        return "5 MegaPixel";
+    }
+    string KeyBoard() 
+    {
+        return "Qwerty1";
+    }
+};
+
+// Concrete classes for AppleMobileV2
+class AppleMobileV2 : public Mobile 
+{
+    public:
+    AppleMobileV2(): Mobile("AppleMobileV2"){}
+    string Camera() 
+    {
+        return "2 MegaPixel";
+    }
+    string KeyBoard() 
+    {
+        return "Qwerty2";
+    }
+};
+
+// Abstract Factory returning a Factory
+class Factory
+{
+    public:
+    virtual Mobile* GetMobile(string type) = 0;
+};
+
+// Concrete classes for AndroidFactory
+class AndroidFactory : public Factory
+{
+    public:
+    AndroidFactory(){}
+    Mobile* GetMobile(string type)
+    {
+        if ( type == "Ver1" ) 
+          return new AndroidMobileV1();
+        
+        if ( type == "Ver2" ) 
+          return new AndroidMobileV2();
+        
+        return NULL;
+    }
+};
+
+// Concrete classes for AppleFactory
+class AppleFactory : public Factory
+{
+    public:
+    AppleFactory(){}
+    
+    Mobile* GetMobile(string type)
+    {
+        if ( type == "Ver1" ) 
+            return new AppleMobileV1();
+            
+        if ( type == "Ver2" ) 
+            return new AppleMobileV2();
+            
+        return NULL;
+    }
+};
+
+int main()
+{
+    Factory* objAndroidFactory = new AndroidFactory();
+    Factory* objAppleFactory   = new AppleFactory();
+    
+    Mobile* myMobile1 = objAndroidFactory->GetMobile("Ver1");
+    myMobile1->PrintSpecs();
+    
+    Mobile* myMobile2 = objAppleFactory->GetMobile("Ver1");
+    myMobile2->PrintSpecs();
+    
+    Mobile* myMobile3 = objAndroidFactory->GetMobile("Ver2");
+    myMobile3->PrintSpecs();
+    
+    Mobile* myMobile4 = objAppleFactory->GetMobile("Ver2");
+    myMobile4->PrintSpecs();
+    
+    return 0;
+}
